@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Lunch Order App</title>
+  <style type="text/css">
+    [v-cloak] {
+      display: none;
+    }
+  </style>
+  <!-- stylesheet will be auto injected -->
+  <!-- scripts will be auto injected -->
+</head>
+<body>
+
+<div class="container" id="lunch-app">
+  <header class="header">
+    <nav class="navbar navbar-light bg-faded">
+      <a class="navbar-brand" href="javascript:void(0)">
+        <i class="fa fa-cutlery"></i> Order Lunch </a>
+      <div class="nav navbar-nav float-xs-right">
+        <a class="nav-item nav-link" href="https://github.com/ankurk91" target="_blank"><i
+          class="fa fa-github"></i> GitHub</a>
+      </div>
+    </nav>
+  </header>
+  <main class="container" v-cloak>
+    <section class="row">
+      <div class="col-lg-6 col-md-12 offset-lg-3" v-if="alert!=false">
+        <div class="alert alert-dismissible fade in" v-bind:class="[alert.type]" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close" v-on:click="alert=false">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <div class="text-xs-center">
+            <i class="fa"
+               v-bind:class="{'fa-info-circle':alert.type=='alert-info','fa-check-circle':alert.type=='alert-success','fa-times-circle':alert.type=='alert-error','fa-exclamation-circle':alert.type=='alert-warning'}"></i>
+            <span v-html="alert.message"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="row">
+      <div class="col-lg-4 col-md-12 offset-lg-4">
+
+        <div class="card text-xs-center" v-show="state.isLoading">
+          <div class="card-block">
+            <h4 class="card-title">
+              Preparing Application
+            </h4>
+            <i class="fa fa-gear fa-spin fa-5x"></i>
+          </div>
+        </div>
+
+        <div class="card text-xs-center" v-show="state.showAuthCard">
+          <div class="card-header">
+            Authentication Required
+          </div>
+          <div class="card-block">
+            <p class="card-text">In order to use this app you need to authenticate with your google
+              account.</p>
+            <button v-on:click="auth(false)" type="button" class="btn btn-success btn-lg">
+              <i class="fa fa-google"></i>
+              Authenticate
+            </button>
+          </div>
+        </div>
+
+        <div class="card text-xs-center" v-show="state.hideUserCard">
+          <div class="card-block">
+            <img class="rounded-circle m-b-1"
+                 alt="avatar" height="150px"
+                 v-bind:src="userInfo.image">
+            <h4 class="card-title text-capitalize" v-text="userInfo.name">User name</h4>
+            <h6 class="card-subtitle text-muted" v-text="userInfo.email">user-name@email.com</h6>
+            <hr>
+            <button v-bind:disabled="!state.canOrder" v-on:click="placeOrder()" type="button"
+                    class="btn btn-primary"><i class="fa fa-chevron-circle-right"></i>
+              Confirm your order
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer text-xs-center text-muted">
+    <p class="col-lg-6 col-md-12 text-lg-left"><i class="fa fa-copyright"></i> Ankur Kumar 2016</p>
+    <p class="col-lg-6 col-md-12 text-lg-right"><i class="fa fa-rocket"></i> by
+      <a class="text-muted" target="_blank" href="https://developers.google.com/sheets">Google Sheet API</a>
+    </p>
+  </footer>
+</div>
+<script type="text/javascript">
+  function initGoogleApi() {
+    console.info('Init Google API');
+    if (window.onSheetApiLoaded) window.onSheetApiLoaded();
+  }
+</script>
+<script src="https://apis.google.com/js/client.js?onload=initGoogleApi"></script>
+</body>
+</html>

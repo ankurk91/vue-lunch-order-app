@@ -1,0 +1,9 @@
+.header {
+  border-bottom: 0.05rem solid #e5e5e5;
+  margin-bottom: 2rem;
+}
+
+.footer {
+  border-top: 0.05rem solid #e5e5e5;
+  padding: 1.0rem 0.5rem;
+}
