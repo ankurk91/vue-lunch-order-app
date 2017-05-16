@@ -62,7 +62,7 @@
     <section class="row">
       <div class="col-lg-4 col-md-12 offset-lg-4">
 
-        <div class="card text-center mb-4" v-show="state.isLoading">
+        <div class="card text-center mb-4" v-show="isLoading">
           <div class="card-block">
             <h4 class="card-title">
               Preparing Application
@@ -71,7 +71,7 @@
           </div>
         </div>
 
-        <div class="card text-center" v-show="state.showAuthCard">
+        <div class="card text-center" v-show="showAuthCard">
           <div class="card-header">
             Authentication Required
           </div>
@@ -85,15 +85,15 @@
           </div>
         </div>
 
-        <div class="card text-center" v-show="state.hideUserCard">
+        <div class="card text-center" v-show="hideUserCard">
           <div class="card-block">
             <img class="rounded-circle mb-2"
                  alt="avatar" height="150px"
-                 :src="userInfo.image">
-            <h4 class="card-title text-capitalize" v-text="userInfo.name">User name</h4>
-            <h6 class="card-subtitle text-muted" v-text="userInfo.email">user-name@email.com</h6>
+                 :src="user.image">
+            <h4 class="card-title text-capitalize" v-text="user.name">User name</h4>
+            <h6 class="card-subtitle text-muted" v-text="user.email">user-name@email.com</h6>
             <hr>
-            <button :disabled="!state.canOrder" @click.prevent="placeOrder()" type="button"
+            <button :disabled="!canOrder" @click.prevent="placeOrder()" type="button"
                     class="btn btn-primary"><i class="fa fa-chevron-circle-right"></i>
               Confirm your order
             </button>

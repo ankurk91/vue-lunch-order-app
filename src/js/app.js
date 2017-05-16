@@ -1,26 +1,25 @@
 'use strict';
 
 const Vue = require('vue/dist/vue.min.js');
+const config = API_CONFIG;// this will be auto injected by webpack DefinePlugin
 
 let app = new Vue({
   el: '#lunch-app',
   data: {
-    config: API_CONFIG,// this will be auto injected by webpack DefinePlugin
-    userInfo: {
+    user: {
       name: '',
       email: '',
       src: ''
     },
     alert: false, //alert.type, alert.message
-    state: {
-      isLoading: true,
-      showAuthCard: false,
-      hideUserCard: false,
-      canOrder: false
-    }
+    isLoading: true,
+    showAuthCard: false,
+    hideUserCard: false,
+    canOrder: false
+
   },
   mounted() {
-
+    console.info('Vue JS app mounted')
   },
   created() {
     console.info('Vue JS app created')
@@ -30,35 +29,35 @@ let app = new Vue({
       console.info('Start oauth...');
       gapi.auth.authorize(
         {
-          'client_id': this.config.oauth.clientID,
-          'scope': this.config.oauth.scopes.join(' '),
+          'client_id': config.oauth.clientID,
+          'scope': config.oauth.scopes.join(' '),
           'immediate': (typeof immediate === 'undefined')
         }, this.handleAuthResult);
     },
     handleAuthResult (authResult) {
       if (authResult && !authResult.error) {
         console.info('User is authenticated');
-        this.state.showAuthCard = false;
-        this.state.isLoading = true;
-        this.getUserInfo();
+        this.showAuthCard = false;
+        this.isLoading = true;
+        this.getUser();
       } else {
         console.info('User is not authenticated');
-        this.state.showAuthCard = true;
-        this.state.isLoading = false;
+        this.showAuthCard = true;
+        this.isLoading = false;
       }
     },
-    getUserInfo () {
+    getUser () {
       gapi.client.load('plus', 'v1', () => {
         gapi.client.plus.people.get({
           'userId': 'me'
         }).execute((response) => {
           console.info('Got user info');
-          this.updateUserInfo(response);
+          this.updateUser(response);
           this.loadSheetAPI();
         });
       });
     },
-    updateUserInfo(response) {
+    updateUser(response) {
       console.info('Updating user info...');
       if (typeof response === 'undefined') {
         console.error('Unable to load user info');
@@ -67,12 +66,12 @@ let app = new Vue({
       }
       // Assuming that email address have a dot
       let nameParts = response.emails[0].value.split('@')[0].split('.');
-      this.userInfo = {
+      this.user = {
         email: response.emails[0].value,
         image: response.image.url.split('?sz=')[0] + '?sz=150',
         name: nameParts[0] + ' ' + nameParts[1]
       };
-      this.state.hideUserCard = true;
+      this.hideUserCard = true;
     },
     loadSheetAPI () {
       console.info('Loading sheet api...');
@@ -84,9 +83,9 @@ let app = new Vue({
     getAllSheets () {
       console.info('Fetching sheet list ...');
       gapi.client.sheets.spreadsheets.get({
-        spreadsheetId: app.config.spreadsheetId
+        spreadsheetId: config.spreadsheetId
       }).then((response) => {
-        app.checkIfSheetExist(response);
+        this.checkIfSheetExist(response);
       }, function (response) {
         console.error('Unable to fetch sheet list');
       });
@@ -114,79 +113,79 @@ let app = new Vue({
       console.info('Creating new sheet...');
 
       gapi.client.sheets.spreadsheets.batchUpdate({
-        spreadsheetId: this.config.spreadsheetId,
+        spreadsheetId: config.spreadsheetId,
         requests: [{
           duplicateSheet: {
-            "sourceSheetId": this.config.templateSheetID,
+            "sourceSheetId": config.templateSheetID,
             "newSheetName": sheetName
           }
         }]
       }).then((response) => {
         console.info('New sheet created- ' + sheetName);
-        app.state.isLoading = false;
-        app.state.canOrder = true;
+        this.isLoading = false;
+        this.canOrder = true;
       }, (response) => {
         console.error('Sheet was not created');
-        app.state.isLoading = false;
+        this.isLoading = false;
       })
     },
     canOrderToday (email) {
       console.info('Get records from this month sheet....');
 
       gapi.client.sheets.spreadsheets.values.get({
-        spreadsheetId: this.config.spreadsheetId,
-        range: app.currentSheet + '!A2:C'
+        spreadsheetId: config.spreadsheetId,
+        range: this.currentSheet + '!A2:C'
       }).then((response) => {
-        app.state.isLoading = false;
+        this.isLoading = false;
         console.info('Got rows from this months sheet');
         let data = response.result;
 
         if (data.values && data.values.length > 0) {
           let found = data.values.filter((row) => {
-            if (row[0] === app.today) {
-              if (row[1] === app.userInfo.email) {
+            if (row[0] === this.today) {
+              if (row[1] === this.user.email) {
                 return row;
               }
             }
           });
           if (found.length !== 0) {
-            app.makeAlert('info', 'You have already ordered for today');
+            this.makeAlert('info', 'You have already ordered for today');
             console.info('You have already ordered for today');
-            app.state.canOrder = false;
+            this.canOrder = false;
             return false;
           }
         } else {
-          console.info('No data/row found in sheet- ' + app.currentSheet);
+          console.info('No data/row found in sheet- ' + this.currentSheet);
         }
-        app.state.canOrder = true;
+        this.canOrder = true;
         return true;
       }, (response) => {
-        app.state.isLoading = false;
-        console.error('Unable to fetch rows from sheet- ' + app.currentSheet);
+        this.isLoading = false;
+        console.error('Unable to fetch rows from sheet- ' + this.currentSheet);
         return false;
       });
     },
     placeOrder() {
-      app.state.canOrder = false;
+      this.canOrder = false;
       console.info('Saving new order...');
 
       gapi.client.sheets.spreadsheets.values.append({
-        spreadsheetId: app.config.spreadsheetId,
-        range: app.currentSheet + '!A2:C2',
+        spreadsheetId: config.spreadsheetId,
+        range: this.currentSheet + '!A2:C2',
         valueInputOption: 'USER_ENTERED',
         majorDimension: 'ROWS',
-        values: [[app.today, app.userInfo.email, new Date().toLocaleString('en-IN')]]
+        values: [[this.today, this.user.email, new Date().toLocaleString('en-IN')]]
       }).then((response) => {
-        app.makeAlert('success', 'Your order has been placed');
+        this.makeAlert('success', 'Your order has been placed');
         console.info('New order has been placed');
       }, (response) => {
-        app.makeAlert('danger', 'Unable to place order');
+        this.makeAlert('danger', 'Unable to place order');
         console.error('Unable to place order');
       });
 
     },
     makeAlert (type, message) {
-      app.alert = {
+      this.alert = {
         type: 'alert-' + type,
         message: message
       }
