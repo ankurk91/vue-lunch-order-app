@@ -11,7 +11,7 @@
 .brackets.json
 
 # logs
-logs/
+/logs/
 *.log
 npm-debug.log*
 error_log
@@ -36,8 +36,8 @@ $RECYCLE.BIN/
 
 # Folder _config file
 [Dd]esktop.ini
-*.DS_store
-.DS_store?
+*.DS_Store
+.DS_Store?
 
 
 # node packages
@@ -52,10 +52,10 @@ bower_components/
 .svn/
 
 # composer
-vendor/
+/vendor/
 composer.phar
 
 
 # project
-dist/
-config.js
+/dist/
+/config.js

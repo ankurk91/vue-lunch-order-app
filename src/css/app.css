@@ -7,3 +7,10 @@
   border-top: 0.05rem solid #e5e5e5;
   padding: 1.0rem 0.5rem;
 }
+
+/**
+* Workaround until next bs release
+*/
+.btn {
+  cursor: pointer;
+}

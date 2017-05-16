@@ -1,7 +1,7 @@
 'use strict';
 
-// isProd is true when we run this command - npm run build
-const isProd = (process.env.npm_lifecycle_event === 'build');
+// isProd is true when we run this command - npm run prod
+const isProd = (process.env.npm_lifecycle_event === 'prod');
 console.log('\x1b[96m isProduction- %s\x1b[0m \n', isProd);
 
 const webpack = require('webpack');
@@ -14,37 +14,56 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 // Add more from here
 // https://webpack.github.io/docs/configuration.html
 module.exports = {
+  context: __dirname, //home directory for webpack
+  resolve: {
+    modules: [path.resolve(__dirname, 'src'), 'node_modules']
+  },
   entry: {
     app: './src/index.js',
-    vendor: ['vue']
+    vendor: ['vue', 'jquery', 'tether', 'bootstrap']
   },
   output: {
     path: path.resolve(__dirname, "dist"),// where to store build files
-    publicPath: isProd ? 'https://ankurk91.github.com/lunch-order-app' : '',// to be used in index.html
-    filename: 'js/[name].[hash].js' // build file name
-  },
-  resolveLoader: {
-    root: path.join(__dirname, 'node_modules'),
+    publicPath: isProd ? 'https://ankurk91.github.io/lunch-order-app' : '',// to be used in index.html
+    filename: "js/[name].[" + (isProd ? 'chunkhash' : 'hash') + "].js" // build file name
   },
   module: {
-    preLoaders: [],
-    postLoaders: [],
-    loaders: [
-      // Catch all css, extract and store them to a separate file
+    rules: [
+      // Catch js files and compile them to es5
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        options: {
+          presets: [
+            ['env', {
+              'modules': false,
+              'targets': {
+                'browsers': ['> 2%'],
+                uglify: true
+              }
+            }]
+          ]
+        },
+        include: path.resolve(__dirname, 'src'),
+        exclude: path.resolve(__dirname, 'node_modules'),
+      },
       {
         test: /\.css$/,
-        //loaders: ['style', 'css'],
-        loader: isProd ? ExtractTextPlugin.extract('css') : 'style-loader!css-loader'
+        loader: isProd ? ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          loader: 'css-loader',
+        }) : 'style-loader!css-loader',
       },
-      // Catch image files and base64 if bigger than 8k
+      // Catch image files and store them in separate folder
+      // todo use url-loader to base64 small files
       {
         test: /\.jpe?g$|\.gif$|\.png$/i,
-        loader: 'url-loader?limit=8192&name=/img/[name].[hash].[ext]'
+        loader: 'file-loader?name=[name].[hash].[ext]' + (isProd ? '&publicPath=/&outputPath=img/' : ''),
       },
       // Catch all fonts and store them to a separate folder
       {
         test: /\.(woff|woff2|eot|ttf|svg)(\?.*$|$)/,
-        loader: 'file-loader?name=/fonts/[name].[ext]?[hash]'
+        loader: 'file-loader?name=[name].[ext]?[hash]' + (isProd ? '&publicPath=/&outputPath=fonts/' : ''),
       }
 
     ]
@@ -62,7 +81,9 @@ module.exports = {
         removeAttributeQuotes: isProd,
         minifyJS: isProd,
         minifyCSS: isProd,
-        minifyURLs: isProd
+        minifyURLs: isProd,
+        // More options here
+        // https://github.com/kangax/html-minifier#options-quick-reference
       }
     }),
     new webpack.DefinePlugin({
@@ -71,7 +92,17 @@ module.exports = {
         NODE_ENV: isProd ? '"production"' : '"development"'
       }
     }),
-    new webpack.optimize.CommonsChunkPlugin('vendor', 'js/[name].[hash].js')
+
+    new webpack.ProvidePlugin({
+      Vue: 'vue',
+      'window.Vue': 'vue',
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery',
+      "window.Tether": 'tether',
+      "Tether": 'tether'
+    }),
+    new webpack.optimize.CommonsChunkPlugin('vendor')
   ],
   // Dev server related configs
   devServer: {
@@ -86,14 +117,16 @@ module.exports = {
     stats: 'errors-only',
     historyApiFallback: true,
   },
-  devtool: isProd ? false : 'source-map',
-  debug: isProd,
+  performance: {
+    hints: false
+  },
+  devtool: isProd ? false : '#cheap-eval-source-map',
   watch: false,
   target: 'web'
 };
 
 
-var plugins = [];
+let plugins = [];
 if (isProd) {
   // Production only plugins
   plugins.push(
@@ -101,15 +134,18 @@ if (isProd) {
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: false,
-        drop_console: true
+        drop_console: true,
+        drop_debugger: true,
       },
       output: {
         comments: false
       }
     }),
+    new webpack.LoaderOptionsPlugin({
+      minimize: true
+    }),
     // Extract css and store them into a separate file
     new ExtractTextPlugin('css/styles.[hash].css'),
-    new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.BannerPlugin('Lunch Order App (c) Ankur Kumar')
   )
 } else {

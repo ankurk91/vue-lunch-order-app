@@ -5,8 +5,8 @@
 > This app allows users to record their lunch orders in a Google Spreadsheet.
 
 ### Prerequisites
-* node js >=6.9.1
-* npm >=3.10.8
+* node js >=6.10.2
+* npm >=3.10.10
 * Google API Web Client ID, [create here](https://console.developers.google.com/)
     * Enable Google Sheets API
     * Enable Google+ API
@@ -25,11 +25,11 @@
 npm install
 
 # Run local server at localhost:9000
-npm run dev
+npm run hot
 ```
 * Generate dist (production ready) folder
 ```
-npm run build
+npm run prod
 ```
 
 ### How it works
@@ -45,8 +45,8 @@ npm run build
 
 | **ForDate**   | **ForEmail**      | **OrderedAt**       |
 | ------------- |:-------------:    | ------------------: |
-| 28/10/2016    | test.user@example.com  | 28/10/2016, 9:51:47 AM |
-| 29/10/2016    | user.name@example.com  | 29/10/2016, 10:51:47 AM |
+| 28/1/2017    | test.user@example.com  | 28/1/2017, 9:51:47 AM |
+| 29/1/2017    | user.name@example.com  | 29/1/2017, 10:51:47 AM |
 
 
 ### Resources

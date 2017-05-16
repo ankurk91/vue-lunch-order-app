@@ -16,27 +16,43 @@
 </head>
 <body>
 
-<div class="container" id="lunch-app">
+<div id="lunch-app">
   <header class="header">
-    <nav class="navbar navbar-light bg-faded">
+    <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+              data-target="#mobileMenu" aria-controls="mobileMenu" aria-expanded="false"
+              aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
       <a class="navbar-brand" href="javascript:void(0)">
         <i class="fa fa-cutlery"></i> Order Lunch </a>
-      <div class="nav navbar-nav float-xs-right">
-        <a class="nav-item nav-link" href="https://github.com/ankurk91" target="_blank"><i
-          class="fa fa-github"></i> GitHub</a>
+
+      <div class="collapse navbar-collapse" id="mobileMenu">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home</a>
+          </li>
+        </ul>
+        <div class="my-2 my-lg-0">
+          <a class="nav-item nav-link" href="https://github.com/ankurk91" target="_blank"><i
+            class="fa fa-github"></i> GitHub</a>
+        </div>
       </div>
+
     </nav>
   </header>
-  <main class="container" v-cloak>
+
+  <main class="main container" v-cloak>
     <section class="row">
       <div class="col-lg-6 col-md-12 offset-lg-3" v-if="alert!=false">
-        <div class="alert alert-dismissible fade in" v-bind:class="[alert.type]" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close" v-on:click="alert=false">
+        <div class="alert alert-dismissible fade show" :class="[alert.type]" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close" @click.prevent="alert=false">
             <span aria-hidden="true">&times;</span>
           </button>
-          <div class="text-xs-center">
+          <div class="text-center">
             <i class="fa"
-               v-bind:class="{'fa-info-circle':alert.type=='alert-info','fa-check-circle':alert.type=='alert-success','fa-times-circle':alert.type=='alert-error','fa-exclamation-circle':alert.type=='alert-warning'}"></i>
+               :class="{'fa-info-circle':alert.type=='alert-info','fa-check-circle':alert.type=='alert-success','fa-times-circle':alert.type=='alert-error','fa-exclamation-circle':alert.type=='alert-warning'}"></i>
             <span v-html="alert.message"></span>
           </div>
         </div>
@@ -46,7 +62,7 @@
     <section class="row">
       <div class="col-lg-4 col-md-12 offset-lg-4">
 
-        <div class="card text-xs-center" v-show="state.isLoading">
+        <div class="card text-center mb-4" v-show="state.isLoading">
           <div class="card-block">
             <h4 class="card-title">
               Preparing Application
@@ -55,29 +71,29 @@
           </div>
         </div>
 
-        <div class="card text-xs-center" v-show="state.showAuthCard">
+        <div class="card text-center" v-show="state.showAuthCard">
           <div class="card-header">
             Authentication Required
           </div>
           <div class="card-block">
             <p class="card-text">In order to use this app you need to authenticate with your google
               account.</p>
-            <button v-on:click="auth(false)" type="button" class="btn btn-success btn-lg">
+            <button @click.prevent="auth(false)" type="button" class="btn btn-success btn-lg">
               <i class="fa fa-google"></i>
               Authenticate
             </button>
           </div>
         </div>
 
-        <div class="card text-xs-center" v-show="state.hideUserCard">
+        <div class="card text-center" v-show="state.hideUserCard">
           <div class="card-block">
-            <img class="rounded-circle m-b-1"
+            <img class="rounded-circle mb-2"
                  alt="avatar" height="150px"
-                 v-bind:src="userInfo.image">
+                 :src="userInfo.image">
             <h4 class="card-title text-capitalize" v-text="userInfo.name">User name</h4>
             <h6 class="card-subtitle text-muted" v-text="userInfo.email">user-name@email.com</h6>
             <hr>
-            <button v-bind:disabled="!state.canOrder" v-on:click="placeOrder()" type="button"
+            <button :disabled="!state.canOrder" @click.prevent="placeOrder()" type="button"
                     class="btn btn-primary"><i class="fa fa-chevron-circle-right"></i>
               Confirm your order
             </button>
@@ -87,11 +103,15 @@
     </section>
   </main>
 
-  <footer class="footer text-xs-center text-muted">
-    <p class="col-lg-6 col-md-12 text-lg-left"><i class="fa fa-copyright"></i> Ankur Kumar 2016</p>
-    <p class="col-lg-6 col-md-12 text-lg-right"><i class="fa fa-rocket"></i> by
-      <a class="text-muted" target="_blank" href="https://developers.google.com/sheets">Google Sheet API</a>
-    </p>
+  <footer class="footer text-center text-muted mt-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 col-md-12 text-lg-left"><i class="fa fa-copyright"></i> Ankur Kumar 2017</div>
+        <div class="col-lg-6 col-md-12 text-lg-right"><i class="fa fa-rocket"></i> by
+          <a class="text-muted" target="_blank" href="https://developers.google.com/sheets">Google Sheet API</a>
+        </div>
+      </div>
+    </div>
   </footer>
 </div>
 <script type="text/javascript">

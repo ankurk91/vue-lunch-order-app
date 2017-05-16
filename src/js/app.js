@@ -1,11 +1,8 @@
 'use strict';
 
-// Note: Not using ES6
-
-// JS files
 const Vue = require('vue/dist/vue.min.js');
 
-var app = new Vue({
+let app = new Vue({
   el: '#lunch-app',
   data: {
     config: API_CONFIG,// this will be auto injected by webpack DefinePlugin
@@ -22,130 +19,137 @@ var app = new Vue({
       canOrder: false
     }
   },
-  created: function () {
+  mounted() {
+
+  },
+  created() {
     console.info('Vue JS app created')
   },
   methods: {
-    auth: function (immediate) {
+    auth (immediate) {
       console.info('Start oauth...');
       gapi.auth.authorize(
         {
-          'client_id': app.config.oauth.clientID,
-          'scope': app.config.oauth.scopes.join(' '),
-          'immediate': (typeof immediate == 'undefined')
-        }, app.handleAuthResult);
+          'client_id': this.config.oauth.clientID,
+          'scope': this.config.oauth.scopes.join(' '),
+          'immediate': (typeof immediate === 'undefined')
+        }, this.handleAuthResult);
     },
-    handleAuthResult: function (authResult) {
+    handleAuthResult (authResult) {
       if (authResult && !authResult.error) {
         console.info('User is authenticated');
-        app.state.showAuthCard = false;
-        app.state.isLoading = true;
-        app.getUserInfo();
+        this.state.showAuthCard = false;
+        this.state.isLoading = true;
+        this.getUserInfo();
       } else {
         console.info('User is not authenticated');
-        app.state.showAuthCard = true;
-        app.state.isLoading = false;
+        this.state.showAuthCard = true;
+        this.state.isLoading = false;
       }
     },
-    getUserInfo: function () {
-      gapi.client.load('plus', 'v1', function () {
+    getUserInfo () {
+      gapi.client.load('plus', 'v1', () => {
         gapi.client.plus.people.get({
           'userId': 'me'
-        }).execute(function (response) {
+        }).execute((response) => {
           console.info('Got user info');
-          app.updateUserInfo(response);
-          app.loadSheetAPI();
+          this.updateUserInfo(response);
+          this.loadSheetAPI();
         });
       });
     },
-    updateUserInfo: function (response) {
+    updateUserInfo(response) {
       console.info('Updating user info...');
       if (typeof response === 'undefined') {
         console.error('Unable to load user info');
-        app.makeAlert('danger', 'Unable to load user information, try again');
+        this.makeAlert('danger', 'Unable to load user information, try again');
         return false;
       }
-      var nameParts = response.emails[0].value.split('@')[0].split('.');
-      app.userInfo = {
+      // Assuming that email address have a dot
+      let nameParts = response.emails[0].value.split('@')[0].split('.');
+      this.userInfo = {
         email: response.emails[0].value,
         image: response.image.url.split('?sz=')[0] + '?sz=150',
         name: nameParts[0] + ' ' + nameParts[1]
       };
-      app.state.hideUserCard = true;
+      this.state.hideUserCard = true;
     },
-    loadSheetAPI: function () {
+    loadSheetAPI () {
       console.info('Loading sheet api...');
       gapi.client.load('https://sheets.googleapis.com/$discovery/rest?version=v4')
-        .then(app.getAllSheets, function (resp) {
+        .then(this.getAllSheets, (resp) => {
           console.error('Unable to load sheet api')
         });
     },
-    getAllSheets: function () {
+    getAllSheets () {
       console.info('Fetching sheet list ...');
       gapi.client.sheets.spreadsheets.get({
         spreadsheetId: app.config.spreadsheetId
-      }).then(function (response) {
+      }).then((response) => {
         app.checkIfSheetExist(response);
       }, function (response) {
         console.error('Unable to fetch sheet list');
       });
     },
-    checkIfSheetExist: function (response) {
-      var sheetName = app.currentSheet;
+    checkIfSheetExist (response) {
+      let sheetName = this.currentSheet;
       if (response.result && response.result.sheets) {
-        var found = response.result.sheets.filter(function (sheet) {
-          return (sheet.properties.title == sheetName);
+        console.log('Lets find sheet with name - ' + sheetName);
+        let found = response.result.sheets.filter((sheet) => {
+          console.log('Found sheet - ' + sheet.properties.title);
+          return (sheet.properties.title === sheetName);
         });
-        if (found != false) {
+        console.log(found);
+        if (found.length !== 0) {
           console.info('Sheet exists already');
-          app.canOrderToday(false);
+          this.canOrderToday(false);
         } else {
-          app.createNewSheet(sheetName);
+          this.createNewSheet(sheetName);
         }
       } else {
         console.error('Invalid sheet response');
       }
     },
-    createNewSheet: function (sheetName) {
+    createNewSheet (sheetName) {
       console.info('Creating new sheet...');
 
       gapi.client.sheets.spreadsheets.batchUpdate({
-        spreadsheetId: app.config.spreadsheetId,
+        spreadsheetId: this.config.spreadsheetId,
         requests: [{
           duplicateSheet: {
-            "sourceSheetId": app.config.templateSheetID,
+            "sourceSheetId": this.config.templateSheetID,
             "newSheetName": sheetName
           }
         }]
-      }).then(function (response) {
+      }).then((response) => {
         console.info('New sheet created- ' + sheetName);
         app.state.isLoading = false;
         app.state.canOrder = true;
-      }, function (response) {
+      }, (response) => {
         console.error('Sheet was not created');
         app.state.isLoading = false;
       })
     },
-    canOrderToday: function (email) {
+    canOrderToday (email) {
       console.info('Get records from this month sheet....');
 
       gapi.client.sheets.spreadsheets.values.get({
-        spreadsheetId: app.config.spreadsheetId,
+        spreadsheetId: this.config.spreadsheetId,
         range: app.currentSheet + '!A2:C'
-      }).then(function (response) {
+      }).then((response) => {
         app.state.isLoading = false;
         console.info('Got rows from this months sheet');
-        var data = response.result;
+        let data = response.result;
 
         if (data.values && data.values.length > 0) {
-          var found = data.values.filter(function (row) {
-            if (row[0] == app.today) {
-              if (row[1] == app.userInfo.email) {
+          let found = data.values.filter((row) => {
+            if (row[0] === app.today) {
+              if (row[1] === app.userInfo.email) {
                 return row;
               }
             }
           });
-          if (found != false) {
+          if (found.length !== 0) {
             app.makeAlert('info', 'You have already ordered for today');
             console.info('You have already ordered for today');
             app.state.canOrder = false;
@@ -156,13 +160,13 @@ var app = new Vue({
         }
         app.state.canOrder = true;
         return true;
-      }, function (response) {
+      }, (response) => {
         app.state.isLoading = false;
         console.error('Unable to fetch rows from sheet- ' + app.currentSheet);
         return false;
       });
     },
-    placeOrder: function () {
+    placeOrder() {
       app.state.canOrder = false;
       console.info('Saving new order...');
 
@@ -172,16 +176,16 @@ var app = new Vue({
         valueInputOption: 'USER_ENTERED',
         majorDimension: 'ROWS',
         values: [[app.today, app.userInfo.email, new Date().toLocaleString('en-IN')]]
-      }).then(function (response) {
+      }).then((response) => {
         app.makeAlert('success', 'Your order has been placed');
         console.info('New order has been placed');
-      }, function (response) {
+      }, (response) => {
         app.makeAlert('danger', 'Unable to place order');
         console.error('Unable to place order');
       });
 
     },
-    makeAlert: function (type, message) {
+    makeAlert (type, message) {
       app.alert = {
         type: 'alert-' + type,
         message: message
@@ -189,11 +193,11 @@ var app = new Vue({
     }
   },
   computed: {
-    currentSheet: function () {
+    currentSheet () {
       return 'Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec'.split(',')[new Date().getMonth()]
     },
-    today: function () {
-      var today = new Date();
+    today () {
+      let today = new Date();
       return today.getDate() + "/" + (today.getMonth() + 1) + "/" + today.getFullYear();
     }
   }
