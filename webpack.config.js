@@ -1,7 +1,7 @@
 'use strict';
 
 // isProd is true when we run this command - npm run prod
-const isProd = (process.env.npm_lifecycle_event === 'prod');
+const isProd = (process.env.NODE_ENV === 'production');
 console.log('\x1b[96m isProduction- %s\x1b[0m \n', isProd);
 
 const webpack = require('webpack');

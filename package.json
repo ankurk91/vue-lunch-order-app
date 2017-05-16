@@ -20,8 +20,8 @@
   "homepage": "https://github.com/ankurk91/lunch-order-app",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "hot": "./node_modules/.bin/webpack-dev-server --inline --hot",
-    "prod": "rm -rf dist && ./node_modules/.bin/webpack -p --progress --hide-modules",
+    "hot": "cross-env NODE_ENV=development ./node_modules/.bin/webpack-dev-server --inline --hot",
+    "prod": "cross-env NODE_ENV=production ./node_modules/.bin/webpack -p --progress --hide-modules",
     "dev": "npm run hot"
   },
   "engines": {
@@ -39,6 +39,7 @@
     "babel-core": "~6.24.0",
     "babel-loader": "~6.4.1",
     "babel-preset-env": "~1.3.2",
+    "cross-env": "~5.0.0",
     "css-loader": "~0.28.1",
     "extract-text-webpack-plugin": "~2.1.0",
     "file-loader": "~0.11.1",

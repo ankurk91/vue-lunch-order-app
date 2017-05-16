@@ -1,6 +1,6 @@
 {
   "name": "lunch-order-app",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "dependencies": {
     "accepts": {
       "version": "1.3.3",
@@ -881,6 +881,18 @@
       "resolved": "https://registry.npmjs.org/create-hmac/-/create-hmac-1.1.6.tgz",
       "dev": true
     },
+    "cross-env": {
+      "version": "5.0.0",
+      "from": "cross-env@latest",
+      "resolved": "https://registry.npmjs.org/cross-env/-/cross-env-5.0.0.tgz",
+      "dev": true
+    },
+    "cross-spawn": {
+      "version": "5.1.0",
+      "from": "cross-spawn@>=5.1.0 <6.0.0",
+      "resolved": "https://registry.npmjs.org/cross-spawn/-/cross-spawn-5.1.0.tgz",
+      "dev": true
+    },
     "crypto-browserify": {
       "version": "3.11.0",
       "from": "crypto-browserify@>=3.11.0 <4.0.0",
@@ -1670,10 +1682,22 @@
       "resolved": "https://registry.npmjs.org/is-utf8/-/is-utf8-0.2.1.tgz",
       "dev": true
     },
+    "is-windows": {
+      "version": "1.0.1",
+      "from": "is-windows@>=1.0.0 <2.0.0",
+      "resolved": "https://registry.npmjs.org/is-windows/-/is-windows-1.0.1.tgz",
+      "dev": true
+    },
     "isarray": {
       "version": "0.0.1",
       "from": "isarray@0.0.1",
       "resolved": "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz",
+      "dev": true
+    },
+    "isexe": {
+      "version": "2.0.0",
+      "from": "isexe@>=2.0.0 <3.0.0",
+      "resolved": "https://registry.npmjs.org/isexe/-/isexe-2.0.0.tgz",
       "dev": true
     },
     "isobject": {
@@ -1825,6 +1849,12 @@
       "version": "1.1.4",
       "from": "lower-case@>=1.1.1 <2.0.0",
       "resolved": "https://registry.npmjs.org/lower-case/-/lower-case-1.1.4.tgz",
+      "dev": true
+    },
+    "lru-cache": {
+      "version": "4.0.2",
+      "from": "lru-cache@>=4.0.1 <5.0.0",
+      "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-4.0.2.tgz",
       "dev": true
     },
     "macaddress": {
@@ -2491,6 +2521,12 @@
       "resolved": "https://registry.npmjs.org/prr/-/prr-0.0.0.tgz",
       "dev": true
     },
+    "pseudomap": {
+      "version": "1.0.2",
+      "from": "pseudomap@>=1.0.1 <2.0.0",
+      "resolved": "https://registry.npmjs.org/pseudomap/-/pseudomap-1.0.2.tgz",
+      "dev": true
+    },
     "public-encrypt": {
       "version": "4.0.0",
       "from": "public-encrypt@>=4.0.0 <5.0.0",
@@ -2833,6 +2869,18 @@
       "version": "2.4.8",
       "from": "sha.js@>=2.4.0 <3.0.0",
       "resolved": "https://registry.npmjs.org/sha.js/-/sha.js-2.4.8.tgz",
+      "dev": true
+    },
+    "shebang-command": {
+      "version": "1.2.0",
+      "from": "shebang-command@>=1.2.0 <2.0.0",
+      "resolved": "https://registry.npmjs.org/shebang-command/-/shebang-command-1.2.0.tgz",
+      "dev": true
+    },
+    "shebang-regex": {
+      "version": "1.0.0",
+      "from": "shebang-regex@>=1.0.0 <2.0.0",
+      "resolved": "https://registry.npmjs.org/shebang-regex/-/shebang-regex-1.0.0.tgz",
       "dev": true
     },
     "slash": {
@@ -3346,6 +3394,12 @@
       "resolved": "https://registry.npmjs.org/whet.extend/-/whet.extend-0.9.9.tgz",
       "dev": true
     },
+    "which": {
+      "version": "1.2.14",
+      "from": "which@>=1.2.9 <2.0.0",
+      "resolved": "https://registry.npmjs.org/which/-/which-1.2.14.tgz",
+      "dev": true
+    },
     "which-module": {
       "version": "1.0.0",
       "from": "which-module@>=1.0.0 <2.0.0",
@@ -3386,6 +3440,12 @@
       "version": "3.2.1",
       "from": "y18n@>=3.2.1 <4.0.0",
       "resolved": "https://registry.npmjs.org/y18n/-/y18n-3.2.1.tgz",
+      "dev": true
+    },
+    "yallist": {
+      "version": "2.1.2",
+      "from": "yallist@>=2.0.0 <3.0.0",
+      "resolved": "https://registry.npmjs.org/yallist/-/yallist-2.1.2.tgz",
       "dev": true
     },
     "yargs": {
