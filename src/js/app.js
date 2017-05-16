@@ -1,6 +1,6 @@
 'use strict';
 
-const Vue = require('vue/dist/vue.min.js');
+import Vue from 'vue';
 const config = API_CONFIG;// this will be auto injected by webpack DefinePlugin
 
 let app = new Vue({

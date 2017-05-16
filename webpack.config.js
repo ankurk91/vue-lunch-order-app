@@ -16,7 +16,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   context: __dirname, //home directory for webpack
   resolve: {
-    modules: [path.resolve(__dirname, 'src'), 'node_modules']
+    modules: [path.resolve(__dirname, 'src'), 'node_modules'],
+    alias: {
+      'vue$': 'vue/dist/vue.esm.js'
+    }
   },
   entry: {
     app: './src/index.js',
@@ -29,6 +32,14 @@ module.exports = {
   },
   module: {
     rules: [
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+        options: {
+          loaders: {}
+          // other vue-loader options go here
+        }
+      },
       // Catch js files and compile them to es5
       {
         test: /\.js$/,
