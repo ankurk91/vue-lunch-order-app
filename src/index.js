@@ -1,9 +1,9 @@
 'use strict';
 
 // JS
-import 'tether';
-import 'jquery';
-import 'bootstrap';
+require('tether');
+window.$ = window.jQuery = require('jquery');
+require('bootstrap');
 
 // Styles
 require('bootstrap/dist/css/bootstrap.css');

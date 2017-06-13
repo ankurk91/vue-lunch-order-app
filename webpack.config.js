@@ -19,7 +19,8 @@ module.exports = {
     modules: [path.resolve(__dirname, 'src'), 'node_modules'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js'
-    }
+    },
+    extensions: ['.js', '.jsx', '.json', '.vue'],
   },
   entry: {
     app: './src/index.js',
@@ -44,17 +45,6 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        options: {
-          presets: [
-            ['env', {
-              'modules': false,
-              'targets': {
-                'browsers': ['> 2%'],
-                uglify: true
-              }
-            }]
-          ]
-        },
         include: path.resolve(__dirname, 'src'),
         exclude: path.resolve(__dirname, 'node_modules'),
       },
@@ -131,7 +121,7 @@ module.exports = {
   performance: {
     hints: false
   },
-  devtool: isProd ? false : '#cheap-eval-source-map',
+  devtool: isProd ? false : '#cheap-module-eval-source-map',
   watch: false,
   target: 'web'
 };

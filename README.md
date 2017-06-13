@@ -1,12 +1,12 @@
-# Lunch Order App
+# Lunch Order Vue.js App
 
-> This is a Single Page Application, powered by Vue JS and Google Spreadsheet.
+> This is a Single Page Application, powered by Vue.js and Google Spreadsheet.
 
 > This app allows users to record their lunch orders in a Google Spreadsheet.
 
-### Prerequisites
+## Prerequisites
 * node js >=6.10.2
-* npm >=3.10.10
+* npm >=4.6.1
 * Google API Web Client ID, [create here](https://console.developers.google.com/)
     * Enable Google Sheets API
     * Enable Google+ API
