@@ -1,7 +1,7 @@
 'use strict';
 
 // isProd is true when we run this command - npm run prod
-const isProd = (process.env.NODE_ENV === 'production');
+const isProd = (process.env.npm_lifecycle_event === 'build');
 console.log('\x1b[96m isProduction- %s\x1b[0m \n', isProd);
 
 const webpack = require('webpack');
@@ -35,36 +35,32 @@ module.exports = {
     rules: [
       {
         test: /\.vue$/,
-        loader: 'vue-loader',
-        options: {
-          loaders: {}
-          // other vue-loader options go here
-        }
+        use: 'vue-loader',
       },
       // Catch js files and compile them to es5
       {
         test: /\.js$/,
-        loader: 'babel-loader',
+        use: 'babel-loader',
         include: path.resolve(__dirname, 'src'),
         exclude: path.resolve(__dirname, 'node_modules'),
       },
       {
         test: /\.css$/,
-        loader: isProd ? ExtractTextPlugin.extract({
+        use: isProd ? ExtractTextPlugin.extract({
+          use: 'css-loader',
           fallback: 'style-loader',
-          loader: 'css-loader',
         }) : 'style-loader!css-loader',
       },
       // Catch image files and store them in separate folder
       // todo use url-loader to base64 small files
       {
         test: /\.jpe?g$|\.gif$|\.png$/i,
-        loader: 'file-loader?name=[name].[hash].[ext]' + (isProd ? '&publicPath=/&outputPath=img/' : ''),
+        use: 'file-loader?name=[name].[hash].[ext]' + (isProd ? '&publicPath=/&outputPath=img/' : ''),
       },
       // Catch all fonts and store them to a separate folder
       {
         test: /\.(woff|woff2|eot|ttf|svg)(\?.*$|$)/,
-        loader: 'file-loader?name=[name].[ext]?[hash]' + (isProd ? '&publicPath=/&outputPath=fonts/' : ''),
+        use: 'file-loader?name=[name].[ext]?[hash]' + (isProd ? '&publicPath=/&outputPath=fonts/' : ''),
       }
 
     ]
@@ -87,6 +83,7 @@ module.exports = {
         // https://github.com/kangax/html-minifier#options-quick-reference
       }
     }),
+
     new webpack.DefinePlugin({
       API_CONFIG: JSON.stringify(require('./config.js')),
       'process.env': {
@@ -103,14 +100,14 @@ module.exports = {
       "window.Tether": 'tether',
       "Tether": 'tether'
     }),
-    new webpack.optimize.CommonsChunkPlugin('vendor')
+    new webpack.optimize.CommonsChunkPlugin('vendor'),
   ],
   // Dev server related configs
   devServer: {
     contentBase: path.resolve(__dirname, "src"),
     port: 8080,
     host: 'localhost',
-    open: true,
+    open: false,
     inline: true,
     hot: true,
     noInfo: false,
@@ -122,8 +119,6 @@ module.exports = {
     hints: false
   },
   devtool: isProd ? false : '#cheap-module-eval-source-map',
-  watch: false,
-  target: 'web'
 };
 
 

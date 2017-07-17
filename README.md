@@ -6,7 +6,7 @@
 
 ## Prerequisites
 * node js >=6.10.2
-* npm >=4.6.1
+* npm >=4.6.1 || yarn 0.27.5
 * Google API Web Client ID, [create here](https://console.developers.google.com/)
     * Enable Google Sheets API
     * Enable Google+ API
@@ -22,14 +22,14 @@
 * Fill valid details in config.js file
 ```
 # Install dependencies
-npm install
+yarn install
 
 # Run local server at localhost:8080
-npm run hot
+yarn run dev
 ```
 * Generate dist (production ready) folder
 ```
-npm run prod
+yarn run prod
 ```
 
 ### Google SpreadSheet template format
