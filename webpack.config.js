@@ -24,7 +24,7 @@ module.exports = {
   },
   entry: {
     app: './src/index.js',
-    vendor: ['vue', 'jquery', 'tether', 'bootstrap']
+    vendor: ['vue', 'jquery', 'popper.js', 'bootstrap']
   },
   output: {
     path: path.resolve(__dirname, "dist"),// where to store build files
@@ -49,7 +49,13 @@ module.exports = {
         use: isProd ? ExtractTextPlugin.extract({
           use: 'css-loader',
           fallback: 'style-loader',
-        }) : 'style-loader!css-loader',
+        }) : [
+          {
+            loader: 'style-loader'
+          }, {
+            loader: 'css-loader'
+          }
+        ],
       },
       // Catch image files and store them in separate folder
       // todo use url-loader to base64 small files
@@ -92,22 +98,21 @@ module.exports = {
     }),
 
     new webpack.ProvidePlugin({
-      Vue: 'vue',
+      Vue: ['vue/dist/vue.esm.js', 'default'],
       'window.Vue': 'vue',
       $: 'jquery',
       jQuery: 'jquery',
       'window.jQuery': 'jquery',
-      "window.Tether": 'tether',
-      "Tether": 'tether'
+      Popper: ['popper.js', 'default'],
     }),
     new webpack.optimize.CommonsChunkPlugin('vendor'),
   ],
   // Dev server related configs
   devServer: {
     contentBase: path.resolve(__dirname, "src"),
-    port: 8080,
+    port: 9000,
     host: 'localhost',
-    open: false,
+    open: true,
     inline: true,
     hot: true,
     noInfo: false,

@@ -18,15 +18,13 @@
 
 <div id="lunch-app">
   <header class="header">
-    <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
-
-      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
-              data-target="#mobileMenu" aria-controls="mobileMenu" aria-expanded="false"
-              aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+    <nav class="navbar navbar-expand-lg navbar-light bg-faded">
       <a class="navbar-brand" href="javascript:void(0)">
         <i class="fa fa-cutlery"></i> Order Lunch </a>
+
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
       <div class="collapse navbar-collapse" id="mobileMenu">
         <ul class="navbar-nav mr-auto">
@@ -63,7 +61,7 @@
       <div class="col-lg-4 col-md-12 offset-lg-4">
 
         <div class="card text-center mb-4" v-show="isLoading">
-          <div class="card-block">
+          <div class="card-body">
             <h4 class="card-title">
               Preparing Application
             </h4>
@@ -75,7 +73,7 @@
           <div class="card-header">
             Authentication Required
           </div>
-          <div class="card-block">
+          <div class="card-body">
             <p class="card-text">In order to use this app you need to authenticate with your google
               account.</p>
             <button @click.prevent="auth(false)" type="button" class="btn btn-success btn-lg">
@@ -86,7 +84,7 @@
         </div>
 
         <div class="card text-center" v-show="hideUserCard">
-          <div class="card-block">
+          <div class="card-body">
             <img class="rounded-circle mb-2"
                  alt="avatar" height="150px"
                  :src="user.image">
@@ -106,7 +104,7 @@
   <footer class="footer text-center text-muted mt-4">
     <div class="container">
       <div class="row">
-        <div class="col-lg-6 col-md-12 text-lg-left"><i class="fa fa-copyright"></i> Ankur Kumar 2017</div>
+        <div class="col-lg-6 col-md-12 text-lg-left"><i class="fa fa-copyright"></i> Ankur Kumar</div>
         <div class="col-lg-6 col-md-12 text-lg-right"><i class="fa fa-rocket"></i> by
           <a class="text-muted" target="_blank" href="https://developers.google.com/sheets">Google Sheet API</a>
         </div>

@@ -4,15 +4,17 @@
 
 > This app allows users to record their lunch orders in a Google Spreadsheet.
 
+![screen-shot](screenshot-mobile.png)
+
 ## Prerequisites
-* node js >=6.10.2
-* npm >=4.6.1 || yarn 0.27.5
+* node js >=8.9.0
+* npm >=5.7.1 || yarn 1.5.1+
 * Google API Web Client ID, [create here](https://console.developers.google.com/)
     * Enable Google Sheets API
     * Enable Google+ API
-    * White list ```http://localhost:8080```
-* A Google Spreadsheet to use as database (see config.example.js)
-* Users should have write permission on spreadsheet
+    * Whitelist ```http://localhost:9000```
+* A Google Spreadsheet to use as database (see `config.example.js`)
+* End-users should have write permission on this spreadsheet
 
 ### Run on localhost
 * Create a new [Google Spreadsheet](https://sheets.google.com)
@@ -24,7 +26,7 @@
 # Install dependencies
 yarn install
 
-# Run local server at localhost:8080
+# Run local server at localhost:9000
 yarn run dev
 ```
 * Generate dist (production ready) folder
@@ -36,8 +38,8 @@ yarn run prod
 
 | **ForDate**   | **ForEmail**      | **OrderedAt**       |
 | ------------- |:-------------:    | ------------------: |
-| 28/1/2017    | test.user@example.com  | 28/1/2017, 9:51:47 AM |
-| 29/1/2017    | user.name@example.com  | 29/1/2017, 10:51:47 AM |
+| 28/1/2018    | test.user@example.com  | 28/1/2018, 9:51:47 AM |
+| 29/1/2018    | user.name@example.com  | 29/1/2018, 10:51:47 AM |
 
 
 ### Resources
