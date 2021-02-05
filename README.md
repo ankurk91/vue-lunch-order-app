@@ -43,8 +43,8 @@ yarn run prod
 
 
 ### Resources
-* [Google Sheep JS API](https://developers.google.com/sheets/quickstart/js)
-* [Vue.js](https://vuejs.org/)
+* [Google Sheet JS API](https://developers.google.com/sheets/quickstart/js)
+* [Vue.js](https://vuejs.org/) v2.x
 * [Webpack](https://github.com/webpack/webpack)
 
 ### TODOs
